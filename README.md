@@ -41,4 +41,6 @@ The run_analysis script file performs the entire analysis in 5 main steps
    
 5. Finally, the data set is grouped by subject and activity. The mean of all of the data columns is then calculated.
    This gives one row of data for each subject/activity unique combination. This creates a tidy data set by meeting the    tidy dataset criteria.
-   - 
+   - Each variable forms its own column
+   - Each observation forms its own row
+   - The data table contains only one type of observational unit
