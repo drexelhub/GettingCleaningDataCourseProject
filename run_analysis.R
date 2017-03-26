@@ -53,7 +53,7 @@ full_table <- rbind(typed_files_df[[1]], typed_files_df[[2]])
 #2. Extracts only the measurements on the mean and standard deviation for each measurement.
 
 #just pull all of the columns with mean() or std() in the column name
-full_table <- full_table[,c(1:3, grep("mean()|std()", columnNames))]
+full_table <- full_table[,c(1:3, grep("mean\\(\\)|std\\(\\)", columnNames))]
 
 #3. Uses descriptive activity names to name the activities in the data set
 
@@ -74,6 +74,8 @@ rm(activityLabels)
 #4. Appropriately labels the data set with descriptive variable names.
 
 #This was done during the data load by naming the measurements using the features.txt file
+#this step further adds the text "Avg" to each name in preparation for the next step
+names(full_table)[4:ncol(full_table)] <- sapply(names(full_table)[4:ncol(full_table)], function(x) paste("Avg-", x, sep=""))
 
 #5. From the data set in step 4, creates a second, independent tidy data set with 
 #the average of each variable for each activity and each subject.
@@ -82,10 +84,6 @@ rm(activityLabels)
 tbl_full <- tbl_df(full_table) 
 tbl_full <- select(tbl_full, -DataType) %>% group_by(Subject, Activity)
 
-for(i in 3:ncol(tbl_full)){
-    means <- mean(tbl_full[[i]], na.rm=TRUE)
-}
-
 tbl_means <- summarise_each(tbl_full, funs(mean))
 script.dir <- dirname(sys.frame(1)$ofile)
-write.csv(tbl_means, file= file.path(script.dir, "summarised.csv"))
+write.csv(tbl_means, file= file.path(script.dir, "summarised.csv"), row.names=FALSE)
